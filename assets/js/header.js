@@ -1,334 +1,19 @@
-document.addEventListener("DOMContentLoaded", function () {
-
-    Promise.all([
-
-        /* ==========================================
-           LOAD HEADER
-        ========================================== */
-
-        fetch("header.html")
-            .then(response => {
-
-                if (!response.ok) {
-                    throw new Error("Failed to load header.html");
-                }
-
-                return response.text();
-
-            }),
-
-
-        /* ==========================================
-           LOAD FOOTER
-        ========================================== */
-
-        fetch("footer.html")
-            .then(response => {
-
-                if (!response.ok) {
-                    throw new Error("Failed to load footer.html");
-                }
-
-                return response.text();
-
-            })
-
-    ])
-
-    .then(([headerHTML, footerHTML]) => {
-
-
-        /* ==========================================
-           INSERT HEADER
-        ========================================== */
-
-        const headerContainer =
-            document.getElementById("header-container");
-
-
-        if (headerContainer) {
-
-            headerContainer.innerHTML =
-                headerHTML;
-
-
-            /*
-             * Header has now been inserted
-             * into the DOM.
-             */
-
-            initHeader();
-
-            initScrollHeader();
-
-        } else {
-
-            console.warn(
-                "#header-container was not found."
-            );
-
-        }
-
-
-        /* ==========================================
-           INSERT FOOTER
-        ========================================== */
-
-        const footerContainer =
-            document.getElementById("footer-container");
-
-
-        if (footerContainer) {
-
-            footerContainer.innerHTML =
-                footerHTML;
-
-        } else {
-
-            console.warn(
-                "#footer-container was not found."
-            );
-
-        }
-
-
-        /*
-         * Run navigation after BOTH
-         * header and footer have been inserted.
-         */
-
-        setActiveNav();
-
-        setCurrentYear();
-
-    })
-
-
-    /* ==========================================
-       ERROR HANDLING
-    ========================================== */
-
-    .catch(error => {
-
-        console.error(
-            "Error loading common components:",
-            error
-        );
-
-    });
-
-});
-
-
-
-/* =========================================================
-   MOBILE MENU
-========================================================= */
-
-function initHeader() {
-
-    const openBtn =
-        document.getElementById("open-menu");
-
-    const closeBtn =
-        document.getElementById("close-menu");
-
-    const navLinks =
-        document.querySelector("#header .nav-links");
-
-    const body =
-        document.getElementById("page-body");
-
-    const overlay =
-        document.getElementById("overlay");
-
-
-    /*
-     * Stop if required elements are missing.
-     */
-
-    if (
-        !openBtn ||
-        !closeBtn ||
-        !navLinks
-    ) {
-
-        console.warn(
-            "Mobile menu elements were not found."
-        );
-
-        return;
-
-    }
-
-
-    /* ==========================================
-       OPEN MENU
-    ========================================== */
-
-    openBtn.addEventListener(
-        "click",
-        function () {
-
-            navLinks.classList.add("active");
-
-
-            if (body) {
-                body.classList.add("active");
-            }
-
-
-            if (overlay) {
-                overlay.classList.add("active");
-            }
-
-        }
-    );
-
-
-    /* ==========================================
-       CLOSE MENU
-    ========================================== */
-
-    closeBtn.addEventListener(
-        "click",
-        function () {
-
-            navLinks.classList.remove("active");
-
-
-            if (body) {
-                body.classList.remove("active");
-            }
-
-
-            if (overlay) {
-                overlay.classList.remove("active");
-            }
-
-        }
-    );
-
-
-    /* ==========================================
-       CLOSE MENU USING OVERLAY
-    ========================================== */
-
-    if (overlay) {
-
-        overlay.addEventListener(
-            "click",
-            function () {
-
-                navLinks.classList.remove(
-                    "active"
-                );
-
-
-                if (body) {
-                    body.classList.remove(
-                        "active"
-                    );
-                }
-
-
-                overlay.classList.remove(
-                    "active"
-                );
-
-            }
-        );
-
-    }
-
-}
-
-
-
-/* =========================================================
-   HEADER HIDE / SHOW ON SCROLL
-========================================================= */
-
-function initScrollHeader() {
-
-    const header =
-        document.getElementById("header");
-
-
-    /*
-     * Header is loaded dynamically.
-     *
-     * If it doesn't exist, stop.
-     */
-
-    if (!header) {
-
-        console.warn(
-            "#header was not found."
-        );
-
-        return;
-
-    }
-
-
-    let previousScrollPosition =
-        window.scrollY;
-
-
-    window.addEventListener(
-        "scroll",
-        function () {
-
-            const currentScrollPosition =
-                window.scrollY;
-
-
-            /* ==================================
-               SCROLLING DOWN
-            ================================== */
-
-            if (
-                currentScrollPosition >
-                    previousScrollPosition &&
-                currentScrollPosition > 100
-            ) {
-
-                header.classList.add(
-                    "hide"
-                );
-
-            }
-
-
-            /* ==================================
-               SCROLLING UP
-            ================================== */
-
-            else {
-
-                header.classList.remove(
-                    "hide"
-                );
-
-            }
-
-
-            previousScrollPosition =
-                currentScrollPosition;
-
-        }
-    );
-
-}
-
-
-
 /* =========================================================
    ACTIVE NAVIGATION
 ========================================================= */
 
 function setActiveNav() {
+
+    /*
+     * Get current page filename.
+     *
+     * Examples:
+     *
+     * /repository/                  -> index.html
+     * /repository/index.html       -> index.html
+     * /repository/our-story.html   -> our-story.html
+     * /repository/franchise.html   -> franchise.html
+     */
 
     let currentPage =
         window.location.pathname
@@ -337,16 +22,11 @@ function setActiveNav() {
 
 
     /*
-     * Homepage
+     * If URL ends with "/", we are on the homepage.
      */
 
-    if (
-        currentPage === "" ||
-        currentPage === "index.html"
-    ) {
-
-        currentPage = "/";
-
+    if (!currentPage) {
+        currentPage = "index.html";
     }
 
 
@@ -363,13 +43,38 @@ function setActiveNav() {
     headerLinks.forEach(
         function (link) {
 
-            const href =
+            let href =
                 link.getAttribute("href");
 
 
+            if (!href) {
+                return;
+            }
+
+
             /*
-             * Remove existing active class
-             * first.
+             * Get only the filename from href.
+             *
+             * index.html -> index.html
+             * our-story.html -> our-story.html
+             */
+
+            let linkPage =
+                href.split("/")
+                    .pop();
+
+
+            /*
+             * Handle "/" if it exists anywhere.
+             */
+
+            if (!linkPage) {
+                linkPage = "index.html";
+            }
+
+
+            /*
+             * Remove old active class.
              */
 
             link.classList.remove(
@@ -378,11 +83,11 @@ function setActiveNav() {
 
 
             /*
-             * Compare current page.
+             * Add active class to current page.
              */
 
             if (
-                href === currentPage
+                linkPage === currentPage
             ) {
 
                 link.classList.add(
@@ -408,13 +113,27 @@ function setActiveNav() {
     footerLinks.forEach(
         function (link) {
 
-            const href =
+            let href =
                 link.getAttribute("href");
 
 
+            if (!href) {
+                return;
+            }
+
+
+            let linkPage =
+                href.split("/")
+                    .pop();
+
+
+            if (!linkPage) {
+                linkPage = "index.html";
+            }
+
+
             /*
-             * Remove existing active class
-             * first.
+             * Remove old active class.
              */
 
             link.classList.remove(
@@ -423,11 +142,11 @@ function setActiveNav() {
 
 
             /*
-             * Compare current page.
+             * Add active class to current page.
              */
 
             if (
-                href === currentPage
+                linkPage === currentPage
             ) {
 
                 link.classList.add(
@@ -438,28 +157,5 @@ function setActiveNav() {
 
         }
     );
-
-}
-
-
-
-/* =========================================================
-   CURRENT YEAR
-========================================================= */
-
-function setCurrentYear() {
-
-    const currentYear =
-        document.getElementById(
-            "currentYear"
-        );
-
-
-    if (currentYear) {
-
-        currentYear.textContent =
-            new Date().getFullYear();
-
-    }
 
 }
