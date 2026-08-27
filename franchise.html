@@ -26,8 +26,9 @@
     <div class="page-overlay" id="overlay"></div>
     <!-- header -->
     <div id="header-container"></div>
-    <div class="page-margin">
-        <section class="logo-section">
+    <div class="page-margin franch">
+
+        <section class="abt-section">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-12">
@@ -40,11 +41,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <section class="abt-section">
-            <div class="container">
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="head-cont-div">
@@ -372,7 +368,12 @@
                             <p class="enquiry-intro">Complete the enquiry form below to speak to our franchise team and to get a copy of our latest franchise prospectus.</p>
 
                             <!-- point action="" at your own endpoint / handler -->
-                            <form class="enquiry-form" action="#" method="post">
+                            <form class="enquiry-form" action="send-franchise-enquiry.php" method="post">
+
+                                <!-- honeypot spam trap: real users never see or fill this -->
+                                <div class="fr-hp" aria-hidden="true" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">
+                                    <label>Leave this field empty<input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+                                </div>
 
                                 <div class="fr-grid">
 
@@ -491,10 +492,13 @@
 
                                 <label class="fr-consent">
                                     <input type="checkbox" name="marketingConsent">
-                                    <span>By ticking this box I agree to receive other communications from Hollywood Burgers &amp; Shakes. For more information on how we are committed to protecting and respecting your privacy, please review our <a href="#">Privacy Policy</a>. You can unsubscribe from these communications at any time.</span>
+                                    <span class="fr-consent-note mb-0">By ticking this box I agree to receive other communications from Hollywood Burgers &amp; Shakes. For more information on how we are committed to protecting and respecting your privacy, please review our <a href="#">Privacy Policy</a>. You can unsubscribe from these communications at any time.</span>
                                 </label>
 
-                                <p class="fr-consent-note">By clicking the button below, I confirm that the details provided are correct and accurate and consent to being contacted regarding my enquiry and I'm happy for Hollywood Burgers &amp; Shakes to store and process the personal information submitted above.</p>
+                                <p class="fr-consent-note pad">By clicking the button below, I confirm that the details provided are correct and accurate and consent to being contacted regarding my enquiry and I'm happy for Hollywood Burgers &amp; Shakes to store and process the personal information submitted above.</p>
+
+                                <!-- submission status message (populated by franchise-enquiry.js) -->
+                                <div id="fr-status" class="fr-status" style="display:none"></div>
 
                                 <div class="fr-submit-wrap">
                                     <button type="submit" class="fr-submit">Submit</button>
@@ -523,5 +527,7 @@
     <script src="assets/plugins/owl-carousel/owl.carousel.min.js"></script>
     <!-- custome js -->
     <script src="assets/js/custom.js"></script>
+    <!-- franchise enquiry form (fetch submit + status banner) -->
+    <script src="assets/js/franchise-enquiry.js"></script>
 </body>
 </html>

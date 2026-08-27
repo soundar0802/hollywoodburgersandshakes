@@ -7,7 +7,47 @@ document.addEventListener("DOMContentLoaded", function () {
     const body = document.getElementById("page-body");
     const overlay = document.getElementById("overlay");
 
-    const activePage = window.location.pathname;
+    /*
+     * Active Navigation
+     *
+     * Treat "/", "/index.html", and "/index" as the same
+     * home page so the Home link stays active on all of them.
+     */
+    function normalizePath(path) {
+        path = path.split("?")[0].split("#")[0];
+
+        if (!path.startsWith("/")) {
+            path = "/" + path;
+        }
+
+        if (path === "" || path === "/") {
+            return "/";
+        }
+
+        path = path.replace(/\\/g, "/");
+
+        if (path.endsWith("/index.html")) {
+            path = path.slice(0, -"/index.html".length) || "/";
+        } else if (path.endsWith("/index")) {
+            path = path.slice(0, -"/index".length) || "/";
+        }
+
+        return path.replace(/\/$/, "") || "/";
+    }
+
+    const activePage = normalizePath(window.location.pathname);
+
+    links.forEach(function (link) {
+        const linkPath = normalizePath(
+            new URL(link.href, window.location.href).pathname
+        );
+
+        if (linkPath === activePage) {
+            link.classList.add("active");
+        } else {
+            link.classList.remove("active");
+        }
+    });
 
 
     /*
@@ -70,17 +110,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
             });
 
-
-            /* Active Navigation */
-
-            const linkPath =
-                new URL(link.href).pathname;
-
-            if (linkPath === activePage) {
-
-                link.classList.add("active");
-
-            }
 
         });
 
