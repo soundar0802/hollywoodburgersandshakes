@@ -8,53 +8,55 @@ document.addEventListener("DOMContentLoaded", function () {
     const overlay = document.getElementById("overlay");
 
     /*
-     * Active Navigation
-     *
-     * Treat "/", "/index.html", and "/index" as the same
-     * home page so the Home link stays active on all of them.
+     * Normalize URL path
+     * /index.html       -> /
+     * /                 -> /
+     * /about/index.html -> /about/
      */
     function normalizePath(path) {
         path = path.split("?")[0].split("#")[0];
 
-        if (!path.startsWith("/")) {
-            path = "/" + path;
-        }
-
-        if (path === "" || path === "/") {
-            return "/";
-        }
-
-        path = path.replace(/\\/g, "/");
-
         if (path.endsWith("/index.html")) {
-            path = path.slice(0, -"/index.html".length) || "/";
-        } else if (path.endsWith("/index")) {
-            path = path.slice(0, -"/index".length) || "/";
+            path = path.substring(0, path.length - "index.html".length);
         }
 
-        return path.replace(/\/$/, "") || "/";
+        if (path === "") {
+            path = "/";
+        }
+
+        if (!path.endsWith("/")) {
+            path += "/";
+        }
+
+        return path;
     }
 
+    /*
+     * Get current page path
+     */
     const activePage = normalizePath(window.location.pathname);
 
+    /*
+     * Active Navigation
+     */
     links.forEach(function (link) {
+
         const linkPath = normalizePath(
-            new URL(link.href, window.location.href).pathname
+            new URL(link.href, window.location.origin).pathname
         );
+
+        link.classList.remove("active");
 
         if (linkPath === activePage) {
             link.classList.add("active");
-        } else {
-            link.classList.remove("active");
         }
+
     });
 
-
     /*
-     * Only initialize mobile menu if all required
-     * elements are available.
+     * Mobile Menu
+     * Only initialize if all required elements are available.
      */
-
     if (
         openMenu &&
         closeMenu &&
@@ -79,6 +81,8 @@ document.addEventListener("DOMContentLoaded", function () {
         closeMenu.addEventListener("click", function () {
 
             slide.classList.remove("active");
+            slide.style.transition = "0.5s";
+
             body.classList.remove("active");
             overlay.classList.remove("active");
 
@@ -109,7 +113,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 overlay.classList.remove("active");
 
             });
-
 
         });
 

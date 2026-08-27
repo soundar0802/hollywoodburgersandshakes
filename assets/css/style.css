@@ -1156,7 +1156,7 @@ header.hide {
 }
 
 .copy-rights-content {
-  margin: 100px 0 0 0;
+  margin: 0px;
 }
 .copy-rights-content .copyrights-para {
   text-transform: capitalize;
@@ -2140,6 +2140,7 @@ header.hide {
   .page-margin.franch h1 {font-size: 50px;}
   .enquiry-section h1 {font-size: 45px;}
   .story-content-section {padding: 30px 0px 0px;}
+  .page-margin.franch {margin: 110px 0px 0px;}
 }
 
 @media (max-width:575px) {
@@ -2161,6 +2162,7 @@ header.hide {
   .footer-nav .nav-link {font-size: 18px !important;}
   .navbar .nav-links {width: 100%;}
   .footer-nav .nav-links {flex-direction: row;flex-wrap: wrap;justify-content: center;}
+  .navbar .nav-links .nav-link-li {width: 110px;text-align: center;}
   .page-footer {padding: 0 0 30px 0;}
   .social-icons-flex {margin: 20px 0 40px;}
 }
@@ -2297,5 +2299,5 @@ header.hide {
     .location-stars svg { width: 22px; height: 22px; margin: 0 4px; }
  
     @media (max-width: 991px) {
-        .location-section { padding: 60px 0 70px; }
+        .location-section { padding: 40px 0; }
     }

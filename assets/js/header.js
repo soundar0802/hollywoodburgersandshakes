@@ -330,29 +330,72 @@ function initScrollHeader() {
 
 function setActiveNav() {
 
-    let currentPage =
-        window.location.pathname
-            .split("/")
-            .pop();
-
-
     /*
-     * Homepage
+     * Normalize the URL so that:
+     *
+     * /                       -> /
+     * /index.html             -> /
+     * /about/                 -> /about/
+     * /about/index.html       -> /about/
      */
 
-    if (
-        currentPage === "" ||
-        currentPage === "index.html"
-    ) {
+    function normalizePath(path) {
 
-        currentPage = "/";
+        if (!path) {
+            return "/";
+        }
 
+        path = path
+            .split("?")[0]
+            .split("#")[0];
+
+        /*
+         * Remove index.html
+         */
+
+        if (path.endsWith("/index.html")) {
+
+            path = path.substring(
+                0,
+                path.length - "index.html".length
+            );
+
+        }
+
+        /*
+         * Convert empty path to /
+         */
+
+        if (path === "") {
+            path = "/";
+        }
+
+        /*
+         * Make sure directory paths
+         * end with /
+         */
+
+        if (!path.endsWith("/")) {
+            path += "/";
+        }
+
+        return path;
     }
 
 
-    /* ==========================================
-       HEADER NAVIGATION
-    ========================================== */
+    /*
+     * Current browser URL
+     */
+
+    const currentPage =
+        normalizePath(
+            window.location.pathname
+        );
+
+
+    /*
+     * HEADER NAVIGATION
+     */
 
     const headerLinks =
         document.querySelectorAll(
@@ -360,44 +403,53 @@ function setActiveNav() {
         );
 
 
-    headerLinks.forEach(
-        function (link) {
+    headerLinks.forEach(function (link) {
 
-            const href =
-                link.getAttribute("href");
+        /*
+         * Get the actual URL of the link.
+         *
+         * This converts:
+         *
+         * index.html
+         * our-story.html
+         * franchise.html
+         *
+         * into their complete pathname.
+         */
 
-
-            /*
-             * Remove existing active class
-             * first.
-             */
-
-            link.classList.remove(
-                "active"
+        const linkPath =
+            normalizePath(
+                new URL(
+                    link.getAttribute("href"),
+                    window.location.href
+                ).pathname
             );
 
 
-            /*
-             * Compare current page.
-             */
+        /*
+         * Remove active from every link first.
+         */
 
-            if (
-                href === currentPage
-            ) {
+        link.classList.remove("active");
 
-                link.classList.add(
-                    "active"
-                );
 
-            }
+        /*
+         * Add active when the normalized
+         * paths are identical.
+         */
+
+        if (linkPath === currentPage) {
+
+            link.classList.add("active");
 
         }
-    );
+
+    });
 
 
-    /* ==========================================
-       FOOTER NAVIGATION
-    ========================================== */
+    /*
+     * FOOTER NAVIGATION
+     */
 
     const footerLinks =
         document.querySelectorAll(
@@ -405,39 +457,27 @@ function setActiveNav() {
         );
 
 
-    footerLinks.forEach(
-        function (link) {
+    footerLinks.forEach(function (link) {
 
-            const href =
-                link.getAttribute("href");
-
-
-            /*
-             * Remove existing active class
-             * first.
-             */
-
-            link.classList.remove(
-                "active"
+        const linkPath =
+            normalizePath(
+                new URL(
+                    link.getAttribute("href"),
+                    window.location.href
+                ).pathname
             );
 
 
-            /*
-             * Compare current page.
-             */
+        link.classList.remove("active");
 
-            if (
-                href === currentPage
-            ) {
 
-                link.classList.add(
-                    "active"
-                );
+        if (linkPath === currentPage) {
 
-            }
+            link.classList.add("active");
 
         }
-    );
+
+    });
 
 }
 
