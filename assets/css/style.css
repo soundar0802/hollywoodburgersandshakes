@@ -1958,7 +1958,7 @@ header.hide {
 .cont-div::before, .cont-div::after {content: '';position: absolute;width: 100px;height: 3px;background: var(--primary-color);top: 25px;}
 .cont-div::before {left: 150px;}
 .cont-div::after {right: 150px;}
-.abt-section {padding: 0px 0px 100px;}
+.abt-section {padding: 0px 0px 30px;}
 .head-cont-div {display: flex;gap: 20px;position: relative;margin: 30px 0px 10px;}
 .story-section .head-cont-div {margin: 0px 0px 30px;justify-content: center;}
 .head-cont-div.home {justify-content: center;margin-top: 60px;}
@@ -2066,7 +2066,7 @@ header.hide {
   .main-cont {font-size: 40px;}
   .cont-div::before, .cont-div::after {width: 50px;top: 20px;}
   .sub-cont {font-size: 18px;}
-  .abt-section {padding: 0px 0px 50px;}
+  .abt-section {padding: 0px 0px 20px;}
   .story-section .para {font-size: 17px;}
   .story-node {padding: 13px;}
   .cont-div::before {left: 70px;}
