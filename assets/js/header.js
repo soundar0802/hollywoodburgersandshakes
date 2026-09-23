@@ -1,3 +1,24 @@
+/* =========================================================
+   IS THIS THE HOME PAGE?
+========================================================= */
+
+function isHomePage() {
+
+    const path =
+        window.location.pathname
+            .split("?")[0]
+            .split("#")[0];
+
+    return (
+        path === "" ||
+        path === "/" ||
+        /\/index\.html$/.test(path)
+    );
+
+}
+
+
+
 document.addEventListener("DOMContentLoaded", function () {
 
     Promise.all([
@@ -72,6 +93,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
         /* ==========================================
            INSERT FOOTER
+
+           The home page hides the social media icons
+           in the footer - every other page keeps them.
+           Stripped out of the markup here, before it's
+           inserted, so nothing downstream (gsap-home.js
+           included) ever sees the element in the DOM.
         ========================================== */
 
         const footerContainer =
@@ -79,6 +106,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
         if (footerContainer) {
+
+            if (isHomePage()) {
+
+                const temp = document.createElement("div");
+                temp.innerHTML = footerHTML;
+
+                const socialIcons =
+                    temp.querySelector(".social-icons-flex");
+
+                if (socialIcons && socialIcons.parentElement) {
+                    socialIcons.parentElement.remove();
+                }
+
+                footerHTML = temp.innerHTML;
+
+            }
 
             footerContainer.innerHTML =
                 footerHTML;
