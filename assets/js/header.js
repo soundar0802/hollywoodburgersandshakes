@@ -9,9 +9,18 @@ function isHomePage() {
             .split("?")[0]
             .split("#")[0];
 
+    /*
+     * "/" only matches a site served from the domain root.
+     * GitHub Pages project sites (and any host serving this
+     * out of a sub-folder) load the home page at a path like
+     * "/reponame/" - no explicit "index.html" in the URL - so
+     * any path ending in "/" (a folder, not a named file) is
+     * treated as the home page too.
+     */
+
     return (
         path === "" ||
-        path === "/" ||
+        path.endsWith("/") ||
         /\/index\.html$/.test(path)
     );
 
