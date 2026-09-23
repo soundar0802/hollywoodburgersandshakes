@@ -2252,7 +2252,7 @@ header.hide {
       content: '';
       position: absolute;
       inset: 0;
-      background: url('../images/home-images/BG-1.png') no-repeat center / cover;
+      background: url('../images/home-images/BG-1.png') no-repeat center / cover fixed;
       opacity: 0.5;
     }
     /* ---- the card ---- */
