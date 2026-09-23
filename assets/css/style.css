@@ -143,22 +143,48 @@ header.hide {
   display: none;
 }
 
-.hero-section {
+/* .hero-section {
   background: url("../images/home-images/burger.png") no-repeat top/cover;
   min-height: 800px;
   display: flex;
   align-items: center;
   justify-content: center;
+} */
+
+.hero-section {
+    position: relative;
+    width: 100%;
+    height: 800px;
+    overflow: hidden;
 }
 
-.dark-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: -1;
+.hero-section .hero-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+}
+
+.hero-section .dark-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    z-index: 1;
+}
+
+.hero-section .container {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-section .hero-content {
+    width: 100%;
 }
 
 .shape-top-img {
@@ -170,8 +196,11 @@ header.hide {
 }
 
 .hero-content {
-  position: relative;
+  position: absolute;
   z-index: 1;
+  inset: 0;
+  margin: auto;
+  max-height: fit-content;
 }
 
 .common-span {
@@ -212,10 +241,6 @@ header.hide {
 }
 .order-btn:hover img {
   transform: translateX(10px);
-}
-
-.location-section {
-  margin-top: -100px;
 }
 
 .location-layers-holder {
@@ -459,7 +484,7 @@ header.hide {
   font-size: 150px;
   color: var(--primary-color);
   line-height: 0.8;
-  transform: rotate(345deg);
+  /* transform: rotate(345deg); */
 }
 .middle-content .middle-title .middle-span {
   display: block;
@@ -512,21 +537,43 @@ header.hide {
   scale: 1.1;
 }
 
-.insta-link-btn {
-  display: inline-block;
-  background: #000;
-  padding: 10px 40px;
-  border-radius: 50px;
-  color: #fff;
-  text-transform: capitalize;
-  font-family: "helvetica_lt_std", sans-serif;
-  border: 1px solid #000;
-  transition: 0.5s;
+.social-follow-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
 }
-.insta-link-btn:hover {
-  border: 1px solid #000;
-  color: #000;
-  background-color: #fff;
+
+.social-follow-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 32px;
+  border-radius: 50px;
+  background: #fff;
+  border: 2px solid var(--primary-color);
+  color: #222;
+  font-family: "helvetica_lt_stdroman";
+  font-size: 18px;
+  text-transform: capitalize;
+  text-decoration: none;
+  transition: 0.35s;
+}
+.social-follow-btn--icon {
+  width: 22px;
+  height: 22px;
+  transition: 0.35s;
+}
+.social-follow-btn:hover {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  color: #fff;
+  box-shadow: 0 8px 26px rgba(230, 21, 126, 0.45);
+  transform: translateY(-3px);
+}
+.social-follow-btn:hover .social-follow-btn--icon {
+  filter: brightness(0) invert(1);
 }
 
 .pink-shade {
@@ -1299,10 +1346,19 @@ header.hide {
   .finance-business-model-box .finance-ul .finance-li {
     margin: 25px 0 0 20px;
   }
+  .hero-heading {
+    font-size: 80px;
+  }
+  .common-span {
+    font-size: 80px;
+  }
 }
 @media (max-width: 1199px) {
   .shape-top-img {
     width: 500px;
+  }
+  .hero-section {
+    height: 600px;
   }
   .location-content .location-span {
     font-size: 35px;
@@ -1510,6 +1566,9 @@ header.hide {
   .pink-shade-cont-left {
     top: 450px;
   }
+  .hero-section {
+    height: 610px;
+  }
 }
 @media (max-width: 767px) {
   .page-overlay {
@@ -1576,7 +1635,7 @@ header.hide {
     width: 30px;
   }
   .hero-section {
-    min-height: 500px;
+    height: 500px;
   }
   .shape-top-img {
     width: 250px;
@@ -1976,8 +2035,8 @@ header.hide {
 .story-section h1::before {content: '';position: absolute;bottom: 0;width: 50px;height: 4px;background: var(--primary-text);border-radius: 10px}
 .story-icon {filter: invert(1);}
 .story-section .head-cont-div h1 {color: #fff;}
-.story-timeline { position: relative; }
-.story-timeline::before {content: "";position: absolute;top: 8px;bottom: 8px;left: 50%;transform: translateX(-50%);border-left: 3px dashed rgba(230, 21, 126, .55);}
+.story-timeline { position: relative; --tl-progress: 0; }
+.story-timeline::before {content: "";position: absolute;top: 8px;bottom: 8px;left: 50%;transform: translateX(-50%);border-left: 3px dashed rgba(230, 21, 126, .55);clip-path: inset(0 0 calc((1 - var(--tl-progress, 0)) * 100%) 0);}
 .story-item {position: relative;width: 50%;padding: 6px 62px 0 0;margin-bottom: 46px;}
 .story-item:last-child { margin-bottom: 0; }
 .story-item--right {left: 50%;padding: 6px 0 0 62px;}
@@ -2172,6 +2231,7 @@ header.hide {
   .navbar .nav-links .nav-link-li {width: 110px;text-align: center;}
   .page-footer {padding: 0 0 30px 0;}
   .social-icons-flex {margin: 20px 0 40px;}
+  .social-follow-btn {font-size: 14px;}
 }
 /* =========================================================
        LOCATION CARDS  ->  copy everything below into style.css
@@ -2186,8 +2246,15 @@ header.hide {
  
         background: #ECEEF5;
         padding: 90px 0 100px;
+        position: relative;
     }
- 
+    .location-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url('../images/home-images/BG-1.png') no-repeat center / cover;
+      opacity: 0.5;
+    }
     /* ---- the card ---- */
     .loc-card {
         position: relative;
@@ -2202,8 +2269,6 @@ header.hide {
         transform: translateY(-6px);
         box-shadow: 0 26px 54px rgba(11, 21, 51, .26);
     }
- 
-    /* marquee light-strip across the very top (alternating pink/blue bulbs) */
     .loc-card::before {
         content: "";
         display: block;
@@ -2214,12 +2279,11 @@ header.hide {
         background-size: 32px 9px;
         background-repeat: repeat-x;
     }
- 
-    /* ---- photo + neon name ---- */
+
     .loc-card__media {
         position: relative;
         height: 210px;
-        background-color: #24102a;         /* fallback tint if the photo is missing */
+        background-color: #24102a;
         background-size: cover;
         background-position: center;
     }
@@ -2256,8 +2320,7 @@ header.hide {
         box-shadow: 0 0 16px rgba(230, 21, 126, .6);
     }
     .loc-card__pin svg { width: 22px; height: 22px; }
- 
-    /* ---- info panel ---- */
+
     .loc-card__info { padding: 22px 22px 24px; }
     .loc-card__addr {
         margin: 0;
@@ -2290,11 +2353,11 @@ header.hide {
         text-transform: uppercase;
         text-decoration: none;
         box-shadow: 0 10px 24px rgba(230, 21, 126, .28);
+        transition: all 0.3s ease-in-out;
     }
     .loc-card__btn svg { width: 18px; height: 18px; }
     .loc-card__btn:hover { background: #c40f69; }
- 
-    /* ---- tagline footer (kept from your section) ---- */
+
     .location-content { text-align: center; margin-top: 30px; }
     .hash-tag-line {
         margin: 12px 0 0;

@@ -101,6 +101,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
         setCurrentYear();
 
+
+        /*
+         * Header and footer markup now exist in the DOM.
+         * Let gsap-animations.js know it is safe to animate them.
+         */
+
+        document.dispatchEvent(
+            new CustomEvent("hbs:partialsReady")
+        );
+
     })
 
 
